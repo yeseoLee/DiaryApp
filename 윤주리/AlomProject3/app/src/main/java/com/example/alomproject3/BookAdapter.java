@@ -12,27 +12,28 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-public class SingleDataAdapter extends RecyclerView.Adapter<SingleDataAdapter.SingleItemRowHolder> {
 
-    private ArrayList<SingleItem> itemsList;
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.SingleItemRowHolder> {
+
+    private ArrayList<BookItem> itemsList;
     private Context mContext;
 
-    public SingleDataAdapter(Context context, ArrayList<SingleItem> itemsList) {
+    public BookAdapter(Context context, ArrayList<BookItem> itemsList) {
         this.itemsList = itemsList;
         this.mContext = context;
     }
 
     @Override
     public SingleItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_single, null);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_book, null);
         SingleItemRowHolder mh = new SingleItemRowHolder(v);
         return mh;
     }
 
     @Override
     public void onBindViewHolder(SingleItemRowHolder holder, int i) {
-        SingleItem singleItem = itemsList.get(i);
-        holder.tvTitle.setText(singleItem.getName());
+        BookItem bookItem = itemsList.get(i);
+        holder.tvTitle.setText(bookItem.getName());
     }
 
     @Override
@@ -50,7 +51,7 @@ public class SingleDataAdapter extends RecyclerView.Adapter<SingleDataAdapter.Si
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v) {//나중에 연결하는 형식으로
                     Toast.makeText(v.getContext(), tvTitle.getText(), Toast.LENGTH_SHORT).show();
                 }
             });

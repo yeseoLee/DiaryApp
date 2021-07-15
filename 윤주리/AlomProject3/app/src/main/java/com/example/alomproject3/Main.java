@@ -1,7 +1,6 @@
 package com.example.alomproject3;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,25 +15,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class BookCase extends AppCompatActivity {
-    ArrayList<SectionItem> sectionDataList;
-    SectionDataAdapter adapter;
+public class Main extends AppCompatActivity {
+    ArrayList<BookCaseItem> sectionDataList;
+    BookCaseAdapter adapter;
     private EditText Search;
-    ArrayList<SectionItem> searchDatalist;
+    ArrayList<BookCaseItem> searchDatalist;
     ImageButton home;
     ItemTouchHelper helper;
-    Button alarm;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookcase);
-        sectionDataList = new ArrayList<SectionItem>();
-        searchDatalist = new ArrayList<SectionItem>();
+        sectionDataList = new ArrayList<BookCaseItem>();
+        searchDatalist = new ArrayList<BookCaseItem>();
         createDummyData();
 
         home=(ImageButton) findViewById(R.id.Home);
@@ -51,7 +48,7 @@ public class BookCase extends AppCompatActivity {
 
         RecyclerView my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
         my_recycler_view.setHasFixedSize(true);
-        adapter = new SectionDataAdapter(this, sectionDataList);
+        adapter = new BookCaseAdapter(this, sectionDataList);
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         my_recycler_view.setAdapter(adapter);
 
@@ -93,47 +90,47 @@ public class BookCase extends AppCompatActivity {
     }
 
     public void createDummyData() {
-        SectionItem todaysky = new SectionItem();
+        BookCaseItem todaysky = new BookCaseItem();
         todaysky.setHeaderTitle("오늘의 하늘");
-        ArrayList<SingleItem> sky = new ArrayList<SingleItem>();
-        sky.add(new SingleItem("1일차", "설명"));
-        sky.add(new SingleItem("2일차", "설명"));
-        sky.add(new SingleItem("3일차", "설명"));
-        sky.add(new SingleItem("4일차", "설명"));
-        sky.add(new SingleItem("5일차", "설명"));
+        ArrayList<BookItem> sky = new ArrayList<BookItem>();
+        sky.add(new BookItem("1일차"));
+        sky.add(new BookItem("2일차"));
+        sky.add(new BookItem("3일차"));
+        sky.add(new BookItem("4일차"));
+        sky.add(new BookItem("5일차"));
         todaysky.setSingItemList(sky);
         sectionDataList.add(todaysky);
 
-        SectionItem rosemary = new SectionItem();
+        BookCaseItem rosemary = new BookCaseItem();
         rosemary.setHeaderTitle("로즈마리 키우기");
-        ArrayList<SingleItem> rose = new ArrayList<SingleItem>();
-        rose.add(new SingleItem("1일차", "설명"));
-        rose.add(new SingleItem("2일차", "설명"));
-        rose.add(new SingleItem("3일차", "설명"));
-        rose.add(new SingleItem("4일차", "설명"));
-        rose.add(new SingleItem("5일차", "설명"));
+        ArrayList<BookItem> rose = new ArrayList<BookItem>();
+        rose.add(new BookItem("1일차"));
+        rose.add(new BookItem("2일차"));
+        rose.add(new BookItem("3일차"));
+        rose.add(new BookItem("4일차"));
+        rose.add(new BookItem("5일차"));
         rosemary.setSingItemList(rose);
         sectionDataList.add(rosemary);
 
-        SectionItem todaymeal = new SectionItem();
+        BookCaseItem todaymeal = new BookCaseItem();
         todaymeal.setHeaderTitle("점심메뉴");
-        ArrayList<SingleItem> meal = new ArrayList<SingleItem>();
-        meal.add(new SingleItem("1일차", "설명"));
-        meal.add(new SingleItem("2일차", "설명"));
-        meal.add(new SingleItem("3일차", "설명"));
-        meal.add(new SingleItem("4일차", "설명"));
-        meal.add(new SingleItem("5일차", "설명"));
+        ArrayList<BookItem> meal = new ArrayList<BookItem>();
+        meal.add(new BookItem("1일차"));
+        meal.add(new BookItem("2일차"));
+        meal.add(new BookItem("3일차"));
+        meal.add(new BookItem("4일차"));
+        meal.add(new BookItem("5일차"));
         todaymeal.setSingItemList(meal);
         sectionDataList.add(todaymeal);
 
-        SectionItem mycat = new SectionItem();
+        BookCaseItem mycat = new BookCaseItem();
         mycat.setHeaderTitle("우리 고양이");
-        ArrayList<SingleItem> cat = new ArrayList<SingleItem>();
-        cat.add(new SingleItem("1일차", "설명"));
-        cat.add(new SingleItem("2일차", "설명"));
-        cat.add(new SingleItem("3일차", "설명"));
-        cat.add(new SingleItem("4일차", "설명"));
-        cat.add(new SingleItem("5일차", "설명"));
+        ArrayList<BookItem> cat = new ArrayList<BookItem>();
+        cat.add(new BookItem("1일차"));
+        cat.add(new BookItem("2일차"));
+        cat.add(new BookItem("3일차"));
+        cat.add(new BookItem("4일차"));
+        cat.add(new BookItem("5일차"));
         mycat.setSingItemList(cat);
         sectionDataList.add(mycat);
     } //end of crerateDummyData()

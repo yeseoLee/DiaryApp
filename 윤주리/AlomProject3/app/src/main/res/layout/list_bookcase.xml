@@ -24,12 +24,6 @@
             android:text="Sample title"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
-        <ImageButton
-            android:id="@+id/Alarm"
-            android:layout_toRightOf="@+id/itemTitle"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:src="@drawable/baseline_watch_later_black_24dp"/>
 
         <View
             android:layout_width="0dp"
