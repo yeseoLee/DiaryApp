@@ -1,22 +1,26 @@
 package com.example.alomproject3;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.ItemRowHolder> {
+public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.ItemRowHolder> implements ItemTouchHelperListener {
 
     private ArrayList<SectionItem> dataList;
     private Context mContext;
+    Button alarm;
 
     public SectionDataAdapter(Context context, ArrayList<SectionItem> dataList) {
         this.dataList = dataList;
@@ -27,6 +31,13 @@ public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.
     public ItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, null);
         ItemRowHolder mh = new ItemRowHolder(v);
+        alarm=v.findViewById(R.id.Alarm);
+        alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
         return mh;
     }
 
@@ -65,6 +76,23 @@ public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.
     public void filderList(ArrayList<SectionItem> filteredList){
         dataList=filteredList;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onItemMove(int from_position, int to_position) {
+        SectionItem number = dataList.get(from_position);
+        dataList.remove(from_position);
+        dataList.add(to_position , number);
+
+        notifyItemMoved(from_position,to_position);
+        return true;
+    }
+
+    @Override
+    public void onItemSwipe(int position) {
+        dataList.remove(position);
+        notifyItemRemoved(position);
+
     }
 
     public class ItemRowHolder extends RecyclerView.ViewHolder {
