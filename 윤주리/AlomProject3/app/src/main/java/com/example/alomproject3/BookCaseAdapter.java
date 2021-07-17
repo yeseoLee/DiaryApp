@@ -1,43 +1,32 @@
 package com.example.alomproject3;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.ItemRowHolder> implements ItemTouchHelperListener {
 
-    private ArrayList<SectionItem> dataList;
+public class BookCaseAdapter extends RecyclerView.Adapter<BookCaseAdapter.ItemRowHolder> implements ItemTouchHelperListener {
+
+    private ArrayList<BookCaseItem> dataList;
     private Context mContext;
-    Button alarm;
 
-    public SectionDataAdapter(Context context, ArrayList<SectionItem> dataList) {
+    public BookCaseAdapter(Context context, ArrayList<BookCaseItem> dataList) {
         this.dataList = dataList;
         this.mContext = context;
     }
 
     @Override
     public ItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, null);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_bookcase, null);
         ItemRowHolder mh = new ItemRowHolder(v);
-        alarm=v.findViewById(R.id.Alarm);
-        alarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-            }
-        });
         return mh;
     }
 
@@ -46,7 +35,7 @@ public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.
         final String sectionName = dataList.get(i).getHeaderTitle();
         ArrayList singleSectionItems = dataList.get(i).getSingItemList();
         itemRowHolder.itemTitle.setText(sectionName);
-        SingleDataAdapter itemListDataAdapter = new SingleDataAdapter(mContext, singleSectionItems);
+        BookAdapter itemListDataAdapter = new BookAdapter(mContext, singleSectionItems);
         itemRowHolder.recycler_view_list.setHasFixedSize(true);
         itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
@@ -73,14 +62,14 @@ public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.
         return (null != dataList ? dataList.size() : 0);
     }
 
-    public void filderList(ArrayList<SectionItem> filteredList){
+    public void filderList(ArrayList<BookCaseItem> filteredList){
         dataList=filteredList;
         notifyDataSetChanged();
     }
 
     @Override
     public boolean onItemMove(int from_position, int to_position) {
-        SectionItem number = dataList.get(from_position);
+        BookCaseItem number = dataList.get(from_position);
         dataList.remove(from_position);
         dataList.add(to_position , number);
 
@@ -90,8 +79,6 @@ public class SectionDataAdapter extends RecyclerView.Adapter<SectionDataAdapter.
 
     @Override
     public void onItemSwipe(int position) {
-        dataList.remove(position);
-        notifyItemRemoved(position);
 
     }
 
