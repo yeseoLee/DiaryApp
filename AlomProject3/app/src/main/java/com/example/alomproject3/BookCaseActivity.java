@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 
-public class Main extends AppCompatActivity {
+public class BookCaseActivity extends AppCompatActivity {
     ArrayList<BookCaseItem> sectionDataList;
     BookCaseAdapter adapter;
     private EditText Search;
@@ -29,7 +28,7 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookcase);
+        setContentView(R.layout.activity_bookcase);
         sectionDataList = new ArrayList<BookCaseItem>();
         searchDatalist = new ArrayList<BookCaseItem>();
         createDummyData();

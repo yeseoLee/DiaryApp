@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class AlbumViewAdapter extends BaseAdapter {
 
-    ArrayList<Photo> list = new ArrayList<Photo>();
+    ArrayList<PhotoItem> list = new ArrayList<PhotoItem>();
     @Override
     public int getCount() {
         return list.size(); //배열의 크기를 반환
@@ -31,7 +31,7 @@ public class AlbumViewAdapter extends BaseAdapter {
 
         if(view == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_albumview,viewGroup,false);
+            view = inflater.inflate(R.layout.item_album,viewGroup,false);
         }
 
         //이제 아이템에 존재하는 텍스트뷰 객체들을 view객체에서 찾아 가져온다
@@ -40,7 +40,7 @@ public class AlbumViewAdapter extends BaseAdapter {
         ImageView ivPhoto = (ImageView)view.findViewById(R.id.item_iv_photo);
 
         //현재 포지션에 해당하는 아이템들에 적용하기 위해 list배열에서 객체를 가져온다.
-        Photo listdata = list.get(i);
+        PhotoItem listdata = list.get(i);
 
         //가져온 객체안에 있는 데이터들을 각 뷰에 적용한다
         tvNum.setText(Integer.toString(listdata.getNum()));
@@ -52,7 +52,7 @@ public class AlbumViewAdapter extends BaseAdapter {
 
     //ArrayList로 선언된 list 변수에 목록을 채워주기 위함 다른방시으로 구현해도 됨
     public void addItemToList(int num, String date, String uri){
-        Photo listdata = new Photo();
+        PhotoItem listdata = new PhotoItem();
 
         listdata.setNum(num);
         listdata.setDate(date);

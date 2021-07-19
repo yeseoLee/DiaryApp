@@ -1,6 +1,6 @@
 package com.example.alomproject3;
 
-public class Photo {
+public class PhotoItem {
 
     private int num;
     private String date;

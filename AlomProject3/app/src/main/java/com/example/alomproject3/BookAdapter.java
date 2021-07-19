@@ -25,7 +25,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.SingleItemRowH
 
     @Override
     public SingleItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_book, null);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_book, null);
         SingleItemRowHolder mh = new SingleItemRowHolder(v);
         return mh;
     }

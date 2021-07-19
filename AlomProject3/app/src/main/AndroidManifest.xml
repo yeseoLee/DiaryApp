@@ -19,7 +19,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".Main"/>
+        <activity android:name=".BookCaseActivity"/>
         <activity android:name=".AlbumActivity"></activity>
     </application>
 

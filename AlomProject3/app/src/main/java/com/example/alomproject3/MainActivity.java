@@ -18,8 +18,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
-    ViewPagerAdapter adapter;
-    List<ViewPagerModelClass> models;
+    MainViewPagerAdapter adapter;
+    List<MainViewPagerItem> models;
     Integer[] colors = null;
     ImageButton setting_btn;
     ImageButton menu_btn;
@@ -125,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
          */
 
         models = new ArrayList<>();
-        models.add(new ViewPagerModelClass(R.drawable.sky, "Sky"));
-        models.add(new ViewPagerModelClass(R.drawable.sky, "sky2"));
+        models.add(new MainViewPagerItem(R.drawable.sky, "Sky"));
+        models.add(new MainViewPagerItem(R.drawable.sky, "sky2"));
 
-        adapter = new ViewPagerAdapter(models, this);
+        adapter = new MainViewPagerAdapter(models, this);
 
         viewPager=findViewById(R.id.view_pager);
         viewPager.setAdapter(adapter);
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     void ChangeToBookcaseActivity(){
-        Intent intent = new Intent(this, Main.class);
+        Intent intent = new Intent(this, BookCaseActivity.class);
         startActivity(intent);
     }
 }
