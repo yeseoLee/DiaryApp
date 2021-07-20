@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="test">
+        <item>항목들</item>
+        <item>고양이</item>
+        <item>식물</item>
+        <item>하늘</item>
+    </string-array>
+
+
+</resources>
