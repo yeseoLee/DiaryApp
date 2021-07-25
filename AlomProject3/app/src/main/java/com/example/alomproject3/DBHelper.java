@@ -20,7 +20,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         //테이블의 구조는 여기서 설계
-        String qry = "CREATE TABLE album(num INTEGER PRIMARY KEY AUTOINCREMENT,tag INTEGER NOT NULL, date TEXT, uri TEXT NOT NULL)";
+        String qry = "CREATE TABLE album(num INTEGER PRIMARY KEY AUTOINCREMENT,tag INTEGER NOT NULL, date TEXT, uri TEXT NOT NULL,)";
         sqLiteDatabase.execSQL(qry);
 
         //dummy data

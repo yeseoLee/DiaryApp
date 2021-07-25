@@ -32,7 +32,6 @@ public class AlbumActivity extends AppCompatActivity {
     Button btnHome;
     Button btnInsert;
     Button btnDeleteAll;
-    TextView tvname;
     AlbumViewAdapter adapter;
 
     //권한 설정
@@ -48,8 +47,6 @@ public class AlbumActivity extends AppCompatActivity {
         //Intent tag 처리
         Intent secondIntent = getIntent();
         int tag = secondIntent.getIntExtra("TAG",0);
-        tvname = (TextView)findViewById(R.id.textname);
-        tvname.setText(String.valueOf(tag));
 
         gvList = (GridView)findViewById(R.id.gridView);
         btnHome = (Button)findViewById(R.id.btn_home);
@@ -157,7 +154,7 @@ public class AlbumActivity extends AppCompatActivity {
 
         //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
         while(cursor.moveToNext()){
-            adapter.addItemToList(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
+            adapter.addItemToList(cursor.getInt(1),cursor.getString(2),cursor.getString(3));
         }
 
         //리스트뷰의 어댑터 대상을 여태 설계한 adapter로 설정
