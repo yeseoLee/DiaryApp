@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ArgbEvaluator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent menuIntent = new Intent(this, AlbumActivity.class);
 
         setting_btn = findViewById(R.id.setting_button);
         setting_btn.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +80,16 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1) {
                             Toast.makeText(MainActivity.this, "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
+                            menuIntent.putExtra("TAG", 1);
+                            startActivity(menuIntent);
                         } else if (menuItem.getItemId() == R.id.action_menu2) {
                             Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
+                            menuIntent.putExtra("TAG", 2);
+                            startActivity(menuIntent);
                         } else {
                             Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
+                            menuIntent.putExtra("TAG", 3);
+                            startActivity(menuIntent);
                         }
 
                         return false;

@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -30,6 +32,7 @@ public class AlbumActivity extends AppCompatActivity {
     Button btnHome;
     Button btnInsert;
     Button btnDeleteAll;
+    TextView tvname;
     AlbumViewAdapter adapter;
 
     //권한 설정
@@ -42,12 +45,19 @@ public class AlbumActivity extends AppCompatActivity {
         //Activity 시작시 권한 확인
         permissionCheck();
 
+        //Intent tag 처리
+        Intent secondIntent = getIntent();
+        int tag = secondIntent.getIntExtra("TAG",0);
+        tvname = (TextView)findViewById(R.id.textname);
+        tvname.setText(String.valueOf(tag));
+
         gvList = (GridView)findViewById(R.id.gridView);
         btnHome = (Button)findViewById(R.id.btn_home);
         btnInsert = (Button)findViewById(R.id.btn_insert);
         btnDeleteAll = (Button)findViewById(R.id.btn_delete_all);
         adapter = new AlbumViewAdapter();
-        displayList();
+
+        displayList(tag);
 
         gvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -64,7 +74,7 @@ public class AlbumActivity extends AppCompatActivity {
                         .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
                             @Override
                             public void onImageSelected(Uri uri) {
-                                insertPhoto(uri);
+                                insertPhoto(uri,tag);
                             }
                         })
                         .create();
@@ -75,7 +85,7 @@ public class AlbumActivity extends AppCompatActivity {
         btnDeleteAll.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteAlbum("album");
+                deleteAlbum("album",tag);
             }
         });
 
@@ -132,13 +142,15 @@ public class AlbumActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    void displayList(){
+    void displayList(int tag){
         //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
 
-        //Cursor라는 그릇에 목록을 담아주기
-        Cursor cursor = database.rawQuery("SELECT * FROM album",null);
+        //Cursor에 목록을 담아주기
+        //Cursor cursor = database.rawQuery("SELECT * FROM album",null);
+        String[] arguments = new String[]{String.valueOf(tag)};
+        Cursor cursor = database.rawQuery("SELECT * FROM album WHERE tag = ?",arguments);
 
         //리스트뷰에 목록 채워주는 도구인 adapter준비
         AlbumViewAdapter adapter = new AlbumViewAdapter();
@@ -153,33 +165,34 @@ public class AlbumActivity extends AppCompatActivity {
 
     }
 
-    void insertPhoto(Uri uri){
+    void insertPhoto(Uri uri,int tag){
 
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         String date = DateFormat.getDateInstance().format(new Date());
+        values.put("tag",tag);
         values.put("date", date);
         values.put("uri", uri.toString());
         // Insert the new row, returning the primary key value of the new row
         long newRowId = database.insert("album", null, values);
 
-        // String qry = "INSERT INTO album(date,uri) VALUES('"+date+"','"+uri+"')";
+        // String qry = "INSERT INTO album(date,uri) VALUES('"+tag+"','"+date+"','"+uri+"')";
         // database.execSQL(qry);
 
-        displayList(); //리스트뷰 새로고침
+        displayList(tag); //리스트뷰 새로고침
 
     }
 
-    void deleteAlbum(String tablename){
+    void deleteAlbum(String tablename,int tag){
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
 
-        String qry = "DELETE FROM " + tablename;
+        String qry = "DELETE FROM '"+tablename+"' WHERE tag ="+tag;
         database.execSQL(qry);
 
-        displayList(); //리스트뷰 새로고침
+        displayList(tag); //리스트뷰 새로고침
     }
 
 }
