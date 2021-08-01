@@ -1,11 +1,12 @@
 package com.example.alomproject3;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 
-public class Main extends AppCompatActivity {
+public class BookCaseActivity extends AppCompatActivity {
     ArrayList<BookCaseItem> sectionDataList;
     BookCaseAdapter adapter;
     private EditText Search;
@@ -29,7 +30,7 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookcase);
+        setContentView(R.layout.activity_bookcase);
         sectionDataList = new ArrayList<BookCaseItem>();
         searchDatalist = new ArrayList<BookCaseItem>();
         createDummyData();
@@ -91,48 +92,53 @@ public class Main extends AppCompatActivity {
 
     public void createDummyData() {
         BookCaseItem todaysky = new BookCaseItem();
-        todaysky.setHeaderTitle("오늘의 하늘");
-        ArrayList<BookItem> sky = new ArrayList<BookItem>();
-        sky.add(new BookItem("1일차"));
-        sky.add(new BookItem("2일차"));
-        sky.add(new BookItem("3일차"));
-        sky.add(new BookItem("4일차"));
-        sky.add(new BookItem("5일차"));
+        Intent secondIntent = getIntent();
+        String tag = secondIntent.getStringExtra("TAG1");
+        todaysky.setHeaderTitle(tag);
+        ArrayList<BookItem> sky = displayList(tag);
         todaysky.setSingItemList(sky);
         sectionDataList.add(todaysky);
 
         BookCaseItem rosemary = new BookCaseItem();
-        rosemary.setHeaderTitle("로즈마리 키우기");
-        ArrayList<BookItem> rose = new ArrayList<BookItem>();
-        rose.add(new BookItem("1일차"));
-        rose.add(new BookItem("2일차"));
-        rose.add(new BookItem("3일차"));
-        rose.add(new BookItem("4일차"));
-        rose.add(new BookItem("5일차"));
+        tag = secondIntent.getStringExtra("TAG2");
+        rosemary.setHeaderTitle(tag);
+        ArrayList<BookItem> rose = displayList(tag);
         rosemary.setSingItemList(rose);
         sectionDataList.add(rosemary);
 
         BookCaseItem todaymeal = new BookCaseItem();
-        todaymeal.setHeaderTitle("점심메뉴");
-        ArrayList<BookItem> meal = new ArrayList<BookItem>();
-        meal.add(new BookItem("1일차"));
-        meal.add(new BookItem("2일차"));
-        meal.add(new BookItem("3일차"));
-        meal.add(new BookItem("4일차"));
-        meal.add(new BookItem("5일차"));
+        tag = secondIntent.getStringExtra("TAG3");
+        ArrayList<BookItem> meal = displayList(tag);
+        todaymeal.setHeaderTitle(tag);
         todaymeal.setSingItemList(meal);
         sectionDataList.add(todaymeal);
 
-        BookCaseItem mycat = new BookCaseItem();
-        mycat.setHeaderTitle("우리 고양이");
-        ArrayList<BookItem> cat = new ArrayList<BookItem>();
-        cat.add(new BookItem("1일차"));
-        cat.add(new BookItem("2일차"));
-        cat.add(new BookItem("3일차"));
-        cat.add(new BookItem("4일차"));
-        cat.add(new BookItem("5일차"));
-        mycat.setSingItemList(cat);
-        sectionDataList.add(mycat);
+
     } //end of crerateDummyData()
+
+    ArrayList<BookItem> displayList(String tag){
+        //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
+        DBHelper helper = new DBHelper(this);
+        SQLiteDatabase database = helper.getReadableDatabase();
+
+        ArrayList<BookItem> sky = new ArrayList<BookItem>();
+
+        //Cursor에 목록을 담아주기
+        //Cursor cursor = database.rawQuery("SELECT * FROM album",null);
+        String[] arguments = new String[]{String.valueOf(tag)};
+        Cursor cursor = database.rawQuery("SELECT * FROM album WHERE tag = ?",arguments);
+
+
+        //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
+        while(cursor.moveToNext()){
+            BookItem book=new BookItem();
+            book.setName(cursor.getString(2));
+            book.setUri(cursor.getString(3));
+            sky.add(book);
+        }
+
+        return sky;
+
+    }
 
 } //end of MainActivity

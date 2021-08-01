@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/go_bookcase"
+        android:title="항목 전체보기"/>
+    <item
+        android:id="@+id/action_menu1"
+        android:title="오늘의 하늘" />
+    <item
+        android:id="@+id/action_menu2"
+        android:title="로즈마리 키우기" />
+    <item
+        android:id="@+id/action_menu3"
+        android:title="점심메뉴" />
+</menu>

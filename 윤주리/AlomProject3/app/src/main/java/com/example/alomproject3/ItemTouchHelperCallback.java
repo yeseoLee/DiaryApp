@@ -18,6 +18,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override public boolean isLongPressDragEnabled() {
         return true;
     }
+    @Override public boolean isItemViewSwipeEnabled() { return false; }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
