@@ -1,11 +1,13 @@
 package com.example.alomproject3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +46,16 @@ public class BookCaseAdapter extends RecyclerView.Adapter<BookCaseAdapter.ItemRo
                 remove(itemRowHolder.getAdapterPosition());
             }
         });
-
+        itemRowHolder.itemTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent menuIntent = new Intent(mContext, AlbumActivity.class);
+                Toast.makeText(mContext, "앨범으로 이동", Toast.LENGTH_SHORT).show();
+                String title=itemRowHolder.itemTitle.getText().toString();//title 받아와서 String으로 변환
+                menuIntent.putExtra("TAG", title);//title(카테고리 제목)값 넘겨주기
+                mContext.startActivity(menuIntent);
+            }
+        });
     }
 
     public void remove(int position){
