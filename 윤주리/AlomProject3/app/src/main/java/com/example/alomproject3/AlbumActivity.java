@@ -157,6 +157,7 @@ public class AlbumActivity extends AppCompatActivity {
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
 
+
         //Cursor에 목록을 담아주기
         //Cursor cursor = database.rawQuery("SELECT * FROM album",null);
         String[] arguments = new String[]{String.valueOf(tag)};

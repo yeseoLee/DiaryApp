@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         setting_btn = findViewById(R.id.setting_button);
         setting_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,10 +80,6 @@ public class MainActivity extends AppCompatActivity {
                         if (menuItem.getItemId()==R.id.go_bookcase){
                             Intent menuIntent = new Intent(MainActivity.this, BookCaseActivity.class);
                             Toast.makeText(MainActivity.this, "항목 전체보기 클릭", Toast.LENGTH_SHORT).show();
-                            menuIntent.putExtra("TAG1", "오늘의 하늘");//title(카테고리 제목)값 넘겨주기
-                            menuIntent.putExtra("TAG2", "로즈마리 키우기");//title(카테고리 제목)값 넘겨주기
-                            menuIntent.putExtra("TAG3", "점심메뉴");//title(카테고리 제목)값 넘겨주기
-
                             startActivity(menuIntent);
                         }
                         else if (menuItem.getItemId() == R.id.action_menu1) {

@@ -2,6 +2,7 @@ package com.example.alomproject3;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.SingleItemRowH
     public void onBindViewHolder(SingleItemRowHolder holder, int i) {
         BookItem bookItem = itemsList.get(i);
         holder.tvTitle.setText(bookItem.getName());
+        holder.itemImage.setImageURI(Uri.parse(bookItem.getUri()));
     }
 
     @Override
