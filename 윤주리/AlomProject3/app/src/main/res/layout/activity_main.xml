@@ -42,7 +42,7 @@
         app:srcCompat="@drawable/baseline_settings_black_24" />
 
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/view_pager"
         android:layout_width="365dp"
         android:layout_height="332dp"

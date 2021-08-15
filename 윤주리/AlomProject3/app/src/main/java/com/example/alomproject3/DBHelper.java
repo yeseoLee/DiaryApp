@@ -1,5 +1,6 @@
 package com.example.alomproject3;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -39,6 +40,14 @@ public class DBHelper extends SQLiteOpenHelper {
         //dummy data
         qry = "INSERT INTO album(tag,uri,date) VALUES('오늘의 하늘','file','7/26')";
         sqLiteDatabase.execSQL(qry);
+    }
+    // Table 데이터 입력
+    public void insert(String t) {
+        SQLiteDatabase db = getWritableDatabase();
+        String qry="INSERT INTO album(tag,uri,date) VALUES('"+t+"','file','7/26')";
+
+        db.execSQL(qry);
+        db.close();
     }
 
 

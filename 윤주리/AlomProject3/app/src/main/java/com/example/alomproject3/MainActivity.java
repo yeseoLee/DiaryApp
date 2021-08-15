@@ -1,10 +1,15 @@
 package com.example.alomproject3;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,23 +20,30 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
+
+    RecyclerView recyclerView;
     MainViewPagerAdapter adapter;
-    List<MainViewPagerItem> models;
+    ArrayList<MainViewPagerItem> models;
     Integer[] colors = null;
     ImageButton setting_btn;
     ImageButton menu_btn;
     Button OK_btn;
-    ArgbEvaluator argbEvaluator =new ArgbEvaluator();
+    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView=(RecyclerView)findViewById(R.id.view_pager);
+        createData();
+
 
         setting_btn = findViewById(R.id.setting_button);
+        //설정버튼
         setting_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
+        //메뉴버튼
         menu_btn = findViewById(R.id.menuButton);
         menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,28 +89,27 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
 
-                        if (menuItem.getItemId()==R.id.go_bookcase){
+                        if (menuItem.getItemId() == R.id.go_bookcase) {
                             Intent menuIntent = new Intent(MainActivity.this, BookCaseActivity.class);
                             Toast.makeText(MainActivity.this, "항목 전체보기 클릭", Toast.LENGTH_SHORT).show();
                             startActivity(menuIntent);
-                        }
-                        else if (menuItem.getItemId() == R.id.action_menu1) {
+                        } else if (menuItem.getItemId() == R.id.action_menu1) {
                             Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
                             Toast.makeText(MainActivity.this, "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
-                            String t=menuItem.getTitle().toString();//title 받아와서 String으로 변환
+                            String t = menuItem.getTitle().toString();//title 받아와서 String으로 변환
                             menuIntent.putExtra("TAG", t);//title(카테고리 제목)값 넘겨주기
                             startActivity(menuIntent);
                         } else if (menuItem.getItemId() == R.id.action_menu2) {
                             Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
                             Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
-                            String t=menuItem.getTitle().toString();
+                            String t = menuItem.getTitle().toString();
                             System.out.println(t);
                             menuIntent.putExtra("TAG", t);
                             startActivity(menuIntent);
                         } else {
                             Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
                             Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
-                            String t=menuItem.getTitle().toString();
+                            String t = menuItem.getTitle().toString();
                             menuIntent.putExtra("TAG", t);
                             startActivity(menuIntent);
                         }
@@ -144,42 +155,50 @@ public class MainActivity extends AppCompatActivity {
 
          */
 
-        models = new ArrayList<>();
-        models.add(new MainViewPagerItem(R.drawable.sky, "Sky"));
-        models.add(new MainViewPagerItem(R.drawable.sky, "sky2"));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
 
-        adapter = new MainViewPagerAdapter(models, this);
-
-        viewPager=findViewById(R.id.view_pager);
-        viewPager.setAdapter(adapter);
-        viewPager.setPadding(130,0,130,0);
-
-        Integer[] colors_temp = {getResources().getColor(R.color.transparent),
-                getResources().getColor(R.color.transparent)};
-        colors=colors_temp;
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if(position<(adapter.getCount()-1)&&position<(colors.length-1))
-                {
-                    viewPager.setBackgroundColor((Integer)argbEvaluator.evaluate(positionOffset,colors[position],colors[position+1]));
-                }else
-                {
-                    //
-                    viewPager.setBackgroundColor(colors[colors.length-1]);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onClick(View v) {
 
             }
         });
+    }
+
+    public void createData() {//초기화 후 데이터 다시 넣기 -> 앨범 생성 할 때마다 ?
+        DBHelper helper = new DBHelper(this);
+        Set<String> data=helper.getData();
+        models=new ArrayList<MainViewPagerItem>();//초기화
+        models.add(new MainViewPagerItem("나만의 앨범을 만들어보세요!"));
+        for(String tag:data){
+            MainViewPagerItem viewpager = displayView(tag);
+            viewpager.setTitle(tag);
+            models.add(viewpager);
+        }
+        adapter = new MainViewPagerAdapter(this, models);
+
+    } //end of crerateDummyData()
+    MainViewPagerItem displayView(String tag){//썸네일 가져오기
+        //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
+        DBHelper helper = new DBHelper(this);
+        SQLiteDatabase database = helper.getReadableDatabase();
+
+        MainViewPagerItem preview = new MainViewPagerItem();
+
+        //Cursor에 목록을 담아주기
+        //Cursor cursor = database.rawQuery("SELECT * FROM album",null);
+        String[] arguments = new String[]{String.valueOf(tag)};
+        Cursor cursor = database.rawQuery("SELECT * FROM album WHERE tag = ?",arguments);
+
+
+        //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
+        if(cursor.moveToNext()){//첫 사진을 썸네일로
+            preview.setImage(cursor.getString(3));
+        }
+
+        return preview;
 
     }
 }
