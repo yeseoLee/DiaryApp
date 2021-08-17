@@ -1,26 +1,36 @@
 package com.example.alomproject3;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ArgbEvaluator;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import gun0912.tedbottompicker.TedBottomPicker;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,9 +40,14 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<MainViewPagerItem> models;
     Integer[] colors = null;
     ImageButton setting_btn;
-    ImageButton menu_btn;
     Button OK_btn;
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    Spinner spinner;
+    //권한 설정
+    final static int PERMISSION_REQUEST_CODE = 1000;
+
+    public Context setContext(){
+        return this;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +88,39 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //메뉴버튼
-        menu_btn = findViewById(R.id.menuButton);
-        menu_btn.setOnClickListener(new View.OnClickListener() {
+        //메뉴버튼-> 동적 스피너로 바꿈
+        spinner=(Spinner)findViewById(R.id.menuSpinner);
+        DBHelper helper = new DBHelper(this);
+        Set<String> data=helper.getData();//데이터베이스에서 카테고리 이름 가져오기
+        List<String> spinnerArray=new ArrayList<>(data);
+        spinnerArray.add(0,"앨범 전체보기");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(//arrayAdapter에 리스트 값 넣기
+                this, android.R.layout.simple_spinner_dropdown_item,spinnerArray);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String tag=spinner.getItemAtPosition(position).toString();
+                if (tag.equals("앨범 전체보기")){
+                    Intent menuIntent = new Intent(MainActivity.this, BookCaseActivity.class);
+                    Toast.makeText(MainActivity.this, "앨범 전체보기 클릭", Toast.LENGTH_SHORT).show();
+                    startActivity(menuIntent);
+                }
+                else {
+                    Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
+                    Toast.makeText(MainActivity.this, tag+"로 이동", Toast.LENGTH_SHORT).show();
+                    menuIntent.putExtra("TAG", tag);//title(카테고리 제목)값 넘겨주기
+                    startActivity(menuIntent);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        /*menu_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 버튼 클릭시 팝업 메뉴가 나오게 하기
@@ -91,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (menuItem.getItemId() == R.id.go_bookcase) {
                             Intent menuIntent = new Intent(MainActivity.this, BookCaseActivity.class);
-                            Toast.makeText(MainActivity.this, "항목 전체보기 클릭", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "앨범 전체보기 클릭", Toast.LENGTH_SHORT).show();
                             startActivity(menuIntent);
                         } else if (menuItem.getItemId() == R.id.action_menu1) {
                             Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
@@ -119,41 +164,45 @@ public class MainActivity extends AppCompatActivity {
                 });
                 popupMenu.show();
             }
+                });
+*/
 
-        });
-
-        /*
+        //OK버튼
         OK_btn = findViewById(R.id.add_button);
         OK_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 버튼 클릭시 팝업 메뉴가 나오게 하기
+                DBHelper helper = new DBHelper(setContext());
+                List<String> a=new ArrayList<>(helper.getData());
+                CharSequence[] album=new CharSequence[a.size()];
+                for(int i=0;i<a.size();i++){
+                    album[i]=a.get(i);
+                }
+                final Set<String> data=helper.getData();
+                AlertDialog.Builder dialog=new AlertDialog.Builder(setContext());
+                dialog.setTitle("사진을 추가 할 앨범을 선택해주세요!")
+                        .setItems(album, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String tag=album[which].toString();
+                                //이미지 URI 가져오기
+                                TedBottomPicker bottomSheetDialogFragment = new TedBottomPicker.Builder(setContext())
+                                        .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                                            @Override
+                                            public void onImageSelected(Uri uri) {
+                                                insertPhoto(uri,tag);
+                                            }
+                                        })
+                                        .create();
 
-                PopupMenu popupMenu = new PopupMenu(
-                        getApplicationContext(),
-                        v);
-                getMenuInflater().inflate(R.menu.category, popupMenu.getMenu());
-                // 이벤트 처리
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_menu1) {
-                            Toast.makeText(MainActivity.this, "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
-                        } else if (menuItem.getItemId() == R.id.action_menu2) {
-                            Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
-                        }
-
-                        return false;
-                    }
-                });
-                popupMenu.show();
+                                bottomSheetDialogFragment.show(getSupportFragmentManager());
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
             }
-
         });
 
-         */
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -199,49 +248,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return preview;
+    }
+    void insertPhoto(Uri uri,String tag){
+
+        DBHelper helper = new DBHelper(this);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        String date = DateFormat.getDateInstance().format(new Date());
+        values.put("tag",tag);
+        values.put("date", date);
+        values.put("uri", uri.toString());
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = database.insert("album", null, values);
+
+        // String qry = "INSERT INTO album(date,uri) VALUES('"+tag+"','"+date+"','"+uri+"')";
+        // database.execSQL(qry);
 
     }
 }
 
-/*
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
-    Button btnGoAlbum;
-    Button btnGoBookcase;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        btnGoAlbum = (Button)findViewById(R.id.btn_go_album);
-        btnGoBookcase = (Button)findViewById(R.id.btn_go_bookcase);
-        btnGoAlbum.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChangeToAlbumActivity();
-            }
-        });
-        btnGoBookcase.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChangeToBookcaseActivity();
-            }
-        });
-    }
-    void ChangeToAlbumActivity(){
-        Intent intent = new Intent(this, AlbumActivity.class);
-        startActivity(intent);
-    }
-    void ChangeToBookcaseActivity(){
-        Intent intent = new Intent(this, BookCaseActivity.class);
-        startActivity(intent);
-    }
-}
-*/
