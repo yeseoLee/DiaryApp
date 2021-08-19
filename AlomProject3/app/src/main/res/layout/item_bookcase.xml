@@ -37,7 +37,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/baseline_close_black_24dp" />
+            android:background="@color/white"
+            android:src="@drawable/outline_clear_black_48" />
 
 
     </RelativeLayout>

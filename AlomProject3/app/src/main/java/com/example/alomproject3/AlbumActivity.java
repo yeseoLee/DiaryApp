@@ -4,17 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,6 +23,8 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.Text;
 
@@ -33,16 +36,19 @@ import gun0912.tedbottompicker.TedBottomPicker;
 
 public class AlbumActivity extends AppCompatActivity {
 
-    GridView gridView;
+    GridView gvList;
     ImageButton btnHome;
-    Button btnInsert;
-    Button btnDeleteAll;
+    ImageButton btnSetting;
+    FloatingActionButton btnInsert;
     AlbumViewAdapter adapter;
     TextView textname;
 
-    private static final int NUM_GRID_COLUMNS = 3;
     //권한 설정
     final static int PERMISSION_REQUEST_CODE = 1000;
+
+    public Context setContext(){
+        return this;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,35 +60,51 @@ public class AlbumActivity extends AppCompatActivity {
         //Intent tag 처리
         Intent secondIntent = getIntent();
         String tag = secondIntent.getStringExtra("TAG");
-        textname=(TextView)findViewById(R.id.textname);
+        textname = findViewById(R.id.textname);
         textname.setText(tag);
 
-        gridView = (GridView)findViewById(R.id.gridView);
-        btnHome = (ImageButton)findViewById(R.id.btn_home);
-        btnInsert = (Button)findViewById(R.id.btn_insert);
-        btnDeleteAll = (Button)findViewById(R.id.btn_delete_all);
+        gvList = findViewById(R.id.gridView);
+        btnHome = findViewById(R.id.btn_home);
+        btnSetting = findViewById(R.id.btn_setting);
+        btnInsert = findViewById(R.id.btn_insert);
 
-        //setup our image grid
-        int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
-        gridView.setColumnWidth(imageWidth);
         displayList(tag);
 
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        gvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),"Index : "+ "hi",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Index : "+ adapter.getItemId(i),Toast.LENGTH_LONG).show();
             }
         });
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        gvList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long uid) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(setContext());
+                builder.setTitle("삭제 확인");
+                builder.setMessage("삭제하시겠습니까?");
+
+                builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        database.execSQL("DELETE FROM album WHERE num="+uid);
+                        Toast.makeText(getApplicationContext(), uid+"번째 아이템이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                        displayList(tag);
+                        Toast.makeText(getApplicationContext(), "삭제됨", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "삭제 취소됨", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
                 //remove
-                database.execSQL("DELETE FROM album WHERE num="+uid);
-                Toast.makeText(getApplicationContext(), uid+"번째 아이템이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                displayList(tag);
+                //database.execSQL("DELETE FROM album WHERE num="+uid);
+                //Toast.makeText(getApplicationContext(), uid+"번째 아이템이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                //displayList(tag);
                 return false;
             }
         });
@@ -95,7 +117,13 @@ public class AlbumActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btnInsert.setOnClickListener(new Button.OnClickListener() {
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //event
+            }
+        });
+        btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //이미지 URI 가져오기
@@ -111,13 +139,6 @@ public class AlbumActivity extends AppCompatActivity {
                 bottomSheetDialogFragment.show(getSupportFragmentManager());
             }
         });
-        btnDeleteAll.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteAlbum("album",tag);
-            }
-        });
-
     }
     //권한 체크 함수
     private void permissionCheck() {
@@ -172,7 +193,6 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     void displayList(String tag){
-        //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase database = helper.getReadableDatabase();
 
@@ -190,7 +210,8 @@ public class AlbumActivity extends AppCompatActivity {
         }
         AlbumViewAdapter adapter = new AlbumViewAdapter(this,dbList);
         //리스트뷰의 어댑터 대상을 여태 설계한 adapter로 설정
-        gridView.setAdapter(adapter);
+        gvList.setAdapter(adapter);
+
     }
 
     void insertPhoto(Uri uri,String tag){
@@ -222,5 +243,22 @@ public class AlbumActivity extends AppCompatActivity {
 
         displayList(tag); //리스트뷰 새로고침
     }
+    private void deleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setTitle("삭제 확인");
+        builder.setMessage("삭제하시겠습니까?");
 
+        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "yes", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+    }
 }

@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 public class BookCaseActivity extends AppCompatActivity {
@@ -91,29 +94,15 @@ public class BookCaseActivity extends AppCompatActivity {
     }
 
     public void createDummyData() {
-        BookCaseItem todaysky = new BookCaseItem();
-        Intent secondIntent = getIntent();
-        String tag = secondIntent.getStringExtra("TAG1");
-        todaysky.setHeaderTitle(tag);
-        ArrayList<BookItem> sky = displayList(tag);
-        todaysky.setSingItemList(sky);
-        sectionDataList.add(todaysky);
-
-        BookCaseItem rosemary = new BookCaseItem();
-        tag = secondIntent.getStringExtra("TAG2");
-        rosemary.setHeaderTitle(tag);
-        ArrayList<BookItem> rose = displayList(tag);
-        rosemary.setSingItemList(rose);
-        sectionDataList.add(rosemary);
-
-        BookCaseItem todaymeal = new BookCaseItem();
-        tag = secondIntent.getStringExtra("TAG3");
-        ArrayList<BookItem> meal = displayList(tag);
-        todaymeal.setHeaderTitle(tag);
-        todaymeal.setSingItemList(meal);
-        sectionDataList.add(todaymeal);
-
-
+        DBHelper helper = new DBHelper(this);
+        Set<String> data=helper.getData();
+        for(String tag:data){
+            BookCaseItem category = new BookCaseItem();
+            category.setHeaderTitle(tag);
+            ArrayList<BookItem> book = displayList(tag);
+            category.setSingItemList(book);
+            sectionDataList.add(category);
+        }
     } //end of crerateDummyData()
 
     ArrayList<BookItem> displayList(String tag){

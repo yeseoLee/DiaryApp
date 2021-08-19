@@ -2,19 +2,25 @@ package com.example.alomproject3;
 
 public class MainViewPagerItem {
 
-    private  int image;
+    private  String image;
     private String title;
 
-    public MainViewPagerItem(int image, String title)
+    public MainViewPagerItem(){
+
+    }
+    public MainViewPagerItem(String title){
+        this.title=title;
+    }
+    public MainViewPagerItem(String image, String title)
     {
         this.image = image;
         this.title = title;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
     public String getTitle() {

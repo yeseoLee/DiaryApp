@@ -7,7 +7,6 @@ public class PhotoItem {
         date = Date;
         uri = Uri;
     }
-
     private int num;
     private String date;
     private String uri;

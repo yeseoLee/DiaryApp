@@ -43,7 +43,7 @@ public class BookCaseAdapter extends RecyclerView.Adapter<BookCaseAdapter.ItemRo
         itemRowHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove(itemRowHolder.getAdapterPosition());
+                remove(itemRowHolder,itemRowHolder.getAdapterPosition());
             }
         });
         itemRowHolder.itemTitle.setOnClickListener(new View.OnClickListener() {
@@ -58,8 +58,11 @@ public class BookCaseAdapter extends RecyclerView.Adapter<BookCaseAdapter.ItemRo
         });
     }
 
-    public void remove(int position){
+    public void remove(ItemRowHolder itemRowHolder,int position){
         try{
+            DBHelper helper = new DBHelper(mContext);
+            String title=itemRowHolder.itemTitle.getText().toString();//title 받아와서 String으로 변환
+            helper.Delete(title);
             dataList.remove(position);
             notifyItemRemoved(position);
         } catch (IndexOutOfBoundsException ex){
