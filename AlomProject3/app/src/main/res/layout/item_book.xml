@@ -32,6 +32,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="Sample title"
+            android:fontFamily="@font/mapoflower_island_a"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 

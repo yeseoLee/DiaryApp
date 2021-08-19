@@ -13,7 +13,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="300dp"
+            android:background="@color/faded_mint">
             <ImageView
                 android:layout_width="match_parent"
 
@@ -35,6 +36,7 @@
                 android:layout_marginBottom="14dp"
                 android:layout_centerInParent="true"
                 android:text="Title"
+                android:fontFamily="@font/mapoflower_island_a"
                 android:textSize="16sp" />
         </RelativeLayout>
 
