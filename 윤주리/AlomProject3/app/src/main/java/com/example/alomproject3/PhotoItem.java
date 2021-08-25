@@ -2,6 +2,11 @@ package com.example.alomproject3;
 
 public class PhotoItem {
 
+    public PhotoItem(int Num,String Date, String Uri) {
+        num= Num;
+        date = Date;
+        uri = Uri;
+    }
     private int num;
     private String date;
     private String uri;

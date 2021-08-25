@@ -5,61 +5,55 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class AlbumViewAdapter extends BaseAdapter {
+public class AlbumViewAdapter extends ArrayAdapter<PhotoItem> {
+    private static final int LAYOUT_RESOURCE_ID = R.layout.item_album;
 
-    ArrayList<PhotoItem> list = new ArrayList<PhotoItem>();
+    private Context mContext;
+    private List<PhotoItem> mItemList;
+
+    public AlbumViewAdapter(Context a_context, List<PhotoItem> a_itemList) {
+        super(a_context, LAYOUT_RESOURCE_ID, a_itemList);
+
+        mContext = a_context;
+        mItemList = a_itemList;
+    }
     @Override
     public int getCount() {
-        return list.size(); //배열의 크기를 반환
+        return mItemList.size(); //배열의 크기를 반환
     }
     @Override
-    public Object getItem(int i) {
-        return list.get(i); //배열에 아이템을 현재 위치값을 넣어 가져옴
+    public long getItemId(int position) {
+        PhotoItem photo = mItemList.get(position);
+        return photo.getNum();
     }
-    @Override
-    public long getItemId(int i) { return i; }
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
 
-        final Context context = viewGroup.getContext();
+    @Override
+    public View getView(int a_position, View a_convertView, ViewGroup a_parent) {
+        AlbumGridItemViewHolder viewHolder;
+        if (a_convertView == null) {
+            a_convertView = LayoutInflater.from(mContext).inflate(LAYOUT_RESOURCE_ID, a_parent, false);
 
-        if(view == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_album,viewGroup,false);
+            viewHolder = new AlbumGridItemViewHolder(a_convertView);
+            a_convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (AlbumGridItemViewHolder) a_convertView.getTag();
         }
 
-        //이제 아이템에 존재하는 텍스트뷰 객체들을 view객체에서 찾아 가져온다
-        TextView tvNum = (TextView)view.findViewById(R.id.item_tv_num);
-        TextView tvDate = (TextView)view.findViewById(R.id.item_tv_date);
-        ImageView ivPhoto = (ImageView)view.findViewById(R.id.item_iv_photo);
+        final PhotoItem countryItem = mItemList.get(a_position);
 
-        //현재 포지션에 해당하는 아이템들에 적용하기 위해 list배열에서 객체를 가져온다.
-        PhotoItem listdata = list.get(i);
-
-        //가져온 객체안에 있는 데이터들을 각 뷰에 적용한다
-        tvNum.setText(Integer.toString(listdata.getNum()));
-        tvDate.setText(listdata.getDate());
-        ivPhoto.setImageURI(Uri.parse(listdata.getUri())); //String 을 Uri로 변환
-
-        return view;
-    }
-
-    //ArrayList로 선언된 list 변수에 목록을 채워주기 위함 다른방시으로 구현해도 됨
-    public void addItemToList(int num, String date, String uri){
-        PhotoItem listdata = new PhotoItem();
-
-        listdata.setNum(num);
-        listdata.setDate(date);
-        listdata.setUri(uri);
-
-        //값들의 조립이 완성된 listdata객체 한개를 list배열에 추가
-        list.add(listdata);
-
+        // Photo 설정
+        viewHolder.ivPhoto.setImageURI(Uri.parse(countryItem.getUri()));
+        // Date 설정
+        viewHolder.tvDate.setText(countryItem.getDate());
+        return a_convertView;
     }
 }

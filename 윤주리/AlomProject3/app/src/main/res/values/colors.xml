@@ -9,4 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lightGray">#EEEEEE</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="grey">#bfbfbf</color>
+    <color name="link_blue">#4d94ff</color>
+
+    <color name="faded_green">#DCE2D3</color>
+    <color name="faded_mint">#DEEEE9</color>
+    <color name="faded_white">#F7F7F7</color>
+    <color name="faded_cream">#FCFCF3</color>
+    <color name="faded_gray">#5E5E5E</color>
 </resources>
