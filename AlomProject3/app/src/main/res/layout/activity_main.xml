@@ -16,7 +16,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="272dp"
-        android:fontFamily="@font/mapoflower_island_a"
+        android:fontFamily="@font/cafe24oneprettynight"
         android:layout_toStartOf="@+id/setting_button"
         />
 
@@ -57,7 +57,7 @@
         android:background="@drawable/background_main_add_photo"
         android:gravity="center_horizontal"
         android:text="오늘의 사진을 기록해보세요"
-        android:fontFamily="@font/mapoflower_island_a"
+        android:fontFamily="@font/cafe24oneprettynight"
         android:textSize="24sp" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -73,7 +73,7 @@
         android:layout_marginEnd="17dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/background_main_add_button"
-        android:fontFamily="@font/mapoflower_island_a"
+        android:fontFamily="@font/cafe24oneprettynight"
         android:text="OK" />
 
 

@@ -22,7 +22,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:text="Sample title"
-            android:fontFamily="@font/mapoflower_island_a"
+            android:fontFamily="@font/cafe24oneprettynight"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 

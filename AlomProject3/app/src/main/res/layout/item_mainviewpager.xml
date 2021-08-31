@@ -36,7 +36,7 @@
                 android:layout_marginBottom="14dp"
                 android:layout_centerInParent="true"
                 android:text="Title"
-                android:fontFamily="@font/mapoflower_island_a"
+                android:fontFamily="@font/cafe24oneprettynight"
                 android:textSize="16sp" />
         </RelativeLayout>
 

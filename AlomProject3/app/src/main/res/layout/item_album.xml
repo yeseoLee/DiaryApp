@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="07-03"
-        android:fontFamily="@font/mapoflower_island_a"
+        android:fontFamily="@font/cafe24oneprettynight"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

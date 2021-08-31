@@ -1,15 +1,20 @@
 package com.example.alomproject3;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -19,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
@@ -33,8 +39,6 @@ import java.util.Set;
 import gun0912.tedbottompicker.TedBottomPicker;
 
 public class MainActivity extends AppCompatActivity {
-
-
     RecyclerView recyclerView;
     MainViewPagerAdapter adapter;
     ArrayList<MainViewPagerItem> models;
@@ -44,16 +48,72 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     //권한 설정
     final static int PERMISSION_REQUEST_CODE = 1000;
+    private ClickCallbackListener callbackListener=new ClickCallbackListener() {
+        @Override
+        public void callBack(int pos) {
+            if (pos==0){
+                Toast.makeText(MainActivity.this, "앨범 추가하기", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder dialog=new AlertDialog.Builder(setContext());
+                dialog.setTitle("앨범의 이름을 적어주세요!");
+                final EditText et=new EditText(setContext());
+                dialog.setView(et);
+                dialog.setPositiveButton("사진 추가하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String tag=et.getText().toString();
+                        //이미지 URI 가져오기
+                        TedBottomPicker bottomSheetDialogFragment = new TedBottomPicker.Builder(setContext())
+                                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                                    @Override
+                                    public void onImageSelected(Uri uri) {
+                                        insertPhoto(uri,tag);
+                                        createData();
+                                        DBHelper helper = new DBHelper(setContext());
+                                        Set<String> data=helper.getData();//데이터베이스에서 카테고리 이름 가져오기
+                                        List<String> spinnerArray=new ArrayList<>(data);
+                                        spinnerArray.add(0,"앨범을 선택하세요!");
+                                        spinnerArray.add(1,"앨범 전체보기");
+                                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(//arrayAdapter에 리스트 값 넣기
+                                                setContext(), android.R.layout.simple_spinner_dropdown_item,spinnerArray);
+                                        spinner.setAdapter(spinnerAdapter);
+                                    }
+                                })
+                                .create();
+
+                        bottomSheetDialogFragment.show(getSupportFragmentManager());
+                        dialog.dismiss();
+
+                    }
+                });
+                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+
+
+
+            }
+
+        }
+
+    };
 
     public Context setContext(){
         return this;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView=(RecyclerView)findViewById(R.id.view_pager);
+
+        permissionCheck();//권한 체크
+
+        recyclerView=findViewById(R.id.view_pager);
         createData();
 
 
@@ -89,11 +149,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //메뉴버튼-> 동적 스피너로 바꿈
-        spinner=(Spinner)findViewById(R.id.menuSpinner);
+        spinner=findViewById(R.id.menuSpinner);
         DBHelper helper = new DBHelper(this);
         Set<String> data=helper.getData();//데이터베이스에서 카테고리 이름 가져오기
         List<String> spinnerArray=new ArrayList<>(data);
-        spinnerArray.add(0,"앨범 전체보기");
+        spinnerArray.add(0,"앨범을 선택하세요!");
+        spinnerArray.add(1,"앨범 전체보기");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(//arrayAdapter에 리스트 값 넣기
                 this, android.R.layout.simple_spinner_dropdown_item,spinnerArray);
         spinner.setAdapter(spinnerAdapter);
@@ -101,7 +162,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tag=spinner.getItemAtPosition(position).toString();
-                if (tag.equals("앨범 전체보기")){
+                if (tag.equals("앨범을 선택하세요!")){
+                }
+                else if (tag.equals("앨범 전체보기")){
                     Intent menuIntent = new Intent(MainActivity.this, BookCaseActivity.class);
                     Toast.makeText(MainActivity.this, "앨범 전체보기 클릭", Toast.LENGTH_SHORT).show();
                     startActivity(menuIntent);
@@ -120,52 +183,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*menu_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 버튼 클릭시 팝업 메뉴가 나오게 하기
-
-                PopupMenu popupMenu = new PopupMenu(
-                        getApplicationContext(), // 현재 화면의 제어권자
-                        v);
-                getMenuInflater().inflate(R.menu.category_menu, popupMenu.getMenu());
-                // 이벤트 처리
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-
-                        if (menuItem.getItemId() == R.id.go_bookcase) {
-                            Intent menuIntent = new Intent(MainActivity.this, BookCaseActivity.class);
-                            Toast.makeText(MainActivity.this, "앨범 전체보기 클릭", Toast.LENGTH_SHORT).show();
-                            startActivity(menuIntent);
-                        } else if (menuItem.getItemId() == R.id.action_menu1) {
-                            Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
-                            Toast.makeText(MainActivity.this, "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
-                            String t = menuItem.getTitle().toString();//title 받아와서 String으로 변환
-                            menuIntent.putExtra("TAG", t);//title(카테고리 제목)값 넘겨주기
-                            startActivity(menuIntent);
-                        } else if (menuItem.getItemId() == R.id.action_menu2) {
-                            Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
-                            Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
-                            String t = menuItem.getTitle().toString();
-                            System.out.println(t);
-                            menuIntent.putExtra("TAG", t);
-                            startActivity(menuIntent);
-                        } else {
-                            Intent menuIntent = new Intent(MainActivity.this, AlbumActivity.class);
-                            Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
-                            String t = menuItem.getTitle().toString();
-                            menuIntent.putExtra("TAG", t);
-                            startActivity(menuIntent);
-                        }
-
-                        return false;
-                    }
-                });
-                popupMenu.show();
-            }
-                });
-*/
 
         //OK버튼
         OK_btn = findViewById(R.id.add_button);
@@ -180,6 +197,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 final Set<String> data=helper.getData();
                 AlertDialog.Builder dialog=new AlertDialog.Builder(setContext());
+                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 dialog.setTitle("사진을 추가 할 앨범을 선택해주세요!")
                         .setItems(album, new DialogInterface.OnClickListener() {
                             @Override
@@ -203,17 +226,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        adapter.setCallbackListener(callbackListener);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     public void createData() {//초기화 후 데이터 다시 넣기 -> 앨범 생성 할 때마다 ?
@@ -227,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
             models.add(viewpager);
         }
         adapter = new MainViewPagerAdapter(this, models);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     } //end of crerateDummyData()
     MainViewPagerItem displayView(String tag){//썸네일 가져오기
@@ -265,6 +284,57 @@ public class MainActivity extends AppCompatActivity {
         // String qry = "INSERT INTO album(date,uri) VALUES('"+tag+"','"+date+"','"+uri+"')";
         // database.execSQL(qry);
 
+    }
+    //권한 체크 함수
+    private void permissionCheck() {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            ArrayList<String> arrayPermission = new ArrayList<String>();
+
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                arrayPermission.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+
+            permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                arrayPermission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+
+            if (arrayPermission.size() > 0) {
+                String strArray[] = new String[arrayPermission.size()];
+                strArray = arrayPermission.toArray(strArray);
+                ActivityCompat.requestPermissions(this, strArray, PERMISSION_REQUEST_CODE);
+            } else {
+                // Initialize 코드
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case PERMISSION_REQUEST_CODE: {
+                if (grantResults.length < 1) {
+                    Toast.makeText(this, "Failed get permission", Toast.LENGTH_SHORT).show();
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                    return ;
+                }
+
+                for (int i=0; i<grantResults.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Permission is denied : " + permissions[i], Toast.LENGTH_SHORT).show();
+                        finish();
+                        return ;
+                    }
+                }
+
+                Toast.makeText(this, "Permission is granted", Toast.LENGTH_SHORT).show();
+                // Initialize 코드
+            }
+            break;
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
 

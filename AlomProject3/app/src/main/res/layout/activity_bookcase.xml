@@ -24,7 +24,7 @@
             android:id="@+id/search"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/mapoflower_island_a"
+            android:fontFamily="@font/cafe24oneprettynight"
             android:layout_weight="1"
             android:text="검색어를 입력하세요." />
 
