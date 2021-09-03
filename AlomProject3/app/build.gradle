@@ -36,6 +36,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.burhanrashid52:photoeditor:1.5.1'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

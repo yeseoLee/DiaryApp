@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alomproject3.photoedit.EditImageActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.Text;
@@ -75,8 +76,18 @@ public class AlbumActivity extends AppCompatActivity {
 
         gvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(getApplicationContext(),"Index : "+ adapter.getItemId(i),Toast.LENGTH_LONG).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long uid) {
+                String sql = "SELECT * FROM album WHERE num="+uid;
+                Cursor cursor = database.rawQuery(sql,null);
+                if(cursor != null){
+                    if(cursor.moveToFirst()){
+                        String mUri = cursor.getString(3);
+                        Toast.makeText(getApplicationContext(),"Uri : "+ mUri ,Toast.LENGTH_LONG).show();
+                        Intent photoEditIntent = new Intent(AlbumActivity.this, EditImageActivity.class);
+                        photoEditIntent.putExtra("imageUri", mUri);
+                        startActivity(photoEditIntent);
+                    }
+                }
             }
         });
         gvList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
