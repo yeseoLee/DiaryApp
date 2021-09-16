@@ -26,7 +26,7 @@
         <activity
             android:name=".photoedit.EditImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AlomProject3"
+            android:theme="@style/Theme.AlomProject3.night"
             tools:ignore="Instantiatable">
             <intent-filter
                 android:label="@string/app_intent_name"
