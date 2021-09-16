@@ -2,6 +2,7 @@ package com.example.alomproject3;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -132,12 +133,14 @@ public class MainActivity extends AppCompatActivity {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_menu1) {//임시로 토스트 메시지로 띄워서 이벤트 실행확인
-                            Toast.makeText(MainActivity.this, "메뉴 1 클릭", Toast.LENGTH_SHORT).show();
-                        } else if (menuItem.getItemId() == R.id.action_menu2) {
-                            Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "메뉴 3 클릭", Toast.LENGTH_SHORT).show();
+                        if (menuItem.getItemId() == R.id.action_menu1) {//day
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        } else if (menuItem.getItemId() == R.id.action_menu2) {//night
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        } else {//휴지통
+                            Intent menuIntent = new Intent(MainActivity.this, TrashActivity.class);
+                            Toast.makeText(MainActivity.this, "휴지통으로 이동", Toast.LENGTH_SHORT).show();
+                            startActivity(menuIntent);
                         }
 
                         return false;

@@ -1,6 +1,8 @@
 package com.example.alomproject3;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +45,22 @@ public class BookCaseAdapter extends RecyclerView.Adapter<BookCaseAdapter.ItemRo
         itemRowHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove(itemRowHolder,itemRowHolder.getAdapterPosition());
+                //remove(itemRowHolder,itemRowHolder.getAdapterPosition());
+                AlertDialog.Builder dialog=new AlertDialog.Builder(mContext);
+                dialog.setTitle("앨범을 영구적으로 삭제하시겠습니까?");
+                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        remove(itemRowHolder,itemRowHolder.getAdapterPosition());
+                    }
+                });
+                dialog.setCancelable(false).show();
             }
         });
         itemRowHolder.itemTitle.setOnClickListener(new View.OnClickListener() {

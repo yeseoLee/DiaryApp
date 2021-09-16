@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/action_menu1"
-        android:title="Night" />
+        android:title="Day" />
     <item
         android:id="@+id/action_menu2"
-        android:title="DAY" />
+        android:title="NIGHT" />
     <item
         android:id="@+id/action_menu3"
         android:title="휴지통" />

@@ -99,7 +99,10 @@ public class AlbumActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
-                        database.execSQL("DELETE FROM album WHERE num="+uid);
+                        //database.execSQL("DELETE FROM album WHERE num="+uid);
+                        //삭제하기 전에 휴지통에 추가
+                        helper.InsertTrash(uid);
+
                         Toast.makeText(getApplicationContext(), uid+"번째 아이템이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                         displayList(tag);
                         Toast.makeText(getApplicationContext(), "삭제됨", Toast.LENGTH_SHORT).show();
