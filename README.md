@@ -1,16 +1,20 @@
 # DiaryApp
 사진 기록 다이어리 프로젝트
-
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/permission.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/createalbum.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/addphoto.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/skys.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/main.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/icons.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/dropdownmenu.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/menu2.png?raw=true" width="30%" height="30%">
-<img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/secondview.png?raw=true" width="30%" height="30%">
-
+<p float="left">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/permission.png?raw=true" width="30%" height="30%">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/createalbum.png?raw=true" width="30%" height="30%">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/addphoto.png?raw=true" width="30%" height="30%">
+</p>
+<p float="left">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/skys.png?raw=true" width="30%" height="30%">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/main.png?raw=true" width="30%" height="30%">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/icons.png?raw=true" width="30%" height="30%">
+</p>
+<p float="left">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/dropdownmenu.png?raw=true" width="30%" height="30%">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/menu2.png?raw=true" width="30%" height="30%">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/secondview.png?raw=true" width="30%" height="30%">
+</p>
 
 <!--
 ![사진추가](https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/addphoto.png?raw=true)
