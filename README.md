@@ -4,13 +4,11 @@
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/permission.png?raw=true" width="15%" height="15%">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/createalbum.png?raw=true" width="15%" height="15%">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/addphoto.png?raw=true" width="15%" height="15%">
-</p>
-<p float="left">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/skys.png?raw=true" width="15%" height="15%">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/main.png?raw=true" width="15%" height="15%">
-  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/icons.png?raw=true" width="15%" height="15%">
 </p>
 <p float="left">
+  <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/icons.png?raw=true" width="15%" height="15%">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/dropdownmenu.png?raw=true" width="15%" height="15%">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/menu2.png?raw=true" width="15%" height="15%">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/secondview.png?raw=true" width="15%" height="15%">
