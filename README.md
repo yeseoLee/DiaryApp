@@ -8,7 +8,9 @@
 - 현재는 날짜 표기 모드 하나만 가능 -> 시작 날짜 기준으로 n일차로 표시하는 모드 추가   
 - 매일 사용자가 사진을 기록할 수 있도록 푸시 알림 기능 추가  
 - 사진 잘리는 비율 수정   
-- 등등...  
+- 등등... 
+ 
+
 
 <p float="left">
   <img src = "https://github.com/yeseoLee/DiaryApp/blob/master/Screenshots/permission.png?raw=true" width="15%" height="15%">
